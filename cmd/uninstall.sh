@@ -1,0 +1,1 @@
+adb uninstall com.ui_attendance
