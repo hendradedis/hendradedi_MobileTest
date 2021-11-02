@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, } from 'react-native'
 import { moderateScale } from 'react-native-size-matters'
 import Icon from 'react-native-vector-icons/Ionicons';
 import GlobalStyle from '../../../components/GlobalStyle';
@@ -9,12 +9,28 @@ import moment from 'moment';
 
 
 class CardHolder extends Component {
+  constructor(props){
+    super(props)
+    this.state={
+      curTime:''
+    }
+  }
+
+  componentDidMount(){
+    setInterval(() => {
+      this.setState({
+        curTime : new Date().toLocaleString()
+      })
+    }, 1000)
+  }
+
   render() {
     let profileDum = 'https://img.okezone.com/content/2020/01/13/320/2152302/ketika-mark-zuckerberg-ngeluh-jadi-bos-facebook-GmBbUyRsiC.jpg'
     let profile = _.get(this.props,'title', profileDum )
     let title = _.get(this.props,'title', 'LIVE ATTENDANCE' )
     let dateNow = moment().format('dddd, DD MMM YYYY')
-    let hourNow = moment().format('hh:mm')
+    let hours = _.get(this.state, "curTime", '--:--')
+    let hourNow = moment(hours).format('hh:mm')
     return (
       <View style={styles.container}>
         <View style={styles.footer}>
@@ -36,8 +52,13 @@ class CardHolder extends Component {
         </View>
         
           <View style={styles.dates}>
-            <Text style={[GlobalStyle.textBold, {fontSize:moderateScale(45,0.25)}]}>{hourNow}</Text>
-            <Text style={[GlobalStyle.textBold, {fontSize:moderateScale(11,0.25)}]}>{dateNow}</Text>
+            {
+              hours === '' ?
+              <Text style={[GlobalStyle.textBold, {fontSize:moderateScale(45,0.25)}]}>--:--</Text>
+              :
+              <Text style={[GlobalStyle.textBold, {fontSize:moderateScale(45,0.25)}]}>{hourNow}</Text>
+            }
+              <Text style={[GlobalStyle.textBold, {fontSize:moderateScale(11,0.25)}]}>{dateNow}</Text>
           </View>  
 
         <Image
